@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edycja</title>
+    <style>
+        .container {
+            margin: auto;
+            width: 768px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        tr, td {
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <table>
+        <thead>
+        <th>Akcje</th>
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Data urodzenia</th>
+        <th>Kolor drużyny</th>
+        <th>Il. punktów</th>
+        </thead>
+        <tbody>
+        <tr class="parent">
+            <td data-input="ignore">
+                <button class="edit" data-id="1" type="button">Edytuj</button>
+            </td>
+            <td data-input="text" data-field="name"><span>John</span></td>
+            <td data-input="text" data-field="surname"><span>Doe</span></td>
+            <td data-input="date" data-field="birthDate"><span>2017-11-07</span></td>
+            <td data-input="select" data-field="teamColor"><span>Czerwony</span></td>
+            <td data-input="ignore" data-field="points"><span>255</span></td>
+        </tr>
+        <tr class="parent">
+            <td data-input="ignore">
+                <button class="edit" data-id="2" type="button">Edytuj</button>
+            </td>
+            <td data-input="text" data-field="name"><span>John</span></td>
+            <td data-input="text" data-field="surname"><span>Doe</span></td>
+            <td data-input="date" data-field="birthDate"><span>2017-11-07</span></td>
+            <td data-input="select" data-field="teamColor"><span>Czerwony</span></td>
+            <td data-input="ignore" data-field="points"><span>255</span></td>
+        </tr>
+        <tr class="parent">
+            <td data-input="ignore">
+                <button class="edit" data-id="3" type="button">Edytuj</button>
+            </td>
+            <td data-input="text" data-field="name"><span>John</span></td>
+            <td data-input="text" data-field="surname"><span>Doe</span></td>
+            <td data-input="date" data-field="birthDate"><span>2017-11-07</span></td>
+            <td data-input="select" data-field="teamColor"><span>Czerwony</span></td>
+            <td data-input="ignore" data-field="points"><span>255</span></td>
+        </tr>
+        <tr class="parent">
+            <td data-input="ignore">
+                <button class="edit" data-id="4" type="button">Edytuj</button>
+            </td>
+            <td data-input="text" data-field="name"><span>John</span></td>
+            <td data-input="text" data-field="surname"><span>Doe</span></td>
+            <td data-input="date" data-field="birthDate"><span>2017-11-07</span></td>
+            <td data-input="select" data-field="teamColor"><span>Czerwony</span></td>
+            <td data-input="ignore" data-field="points"><span>255</span></td>
+        </tr>
+        <tr class="parent">
+            <td data-input="ignore">
+                <button class="edit" data-id="5" type="button">Edytuj</button>
+            </td>
+            <td data-input="text" data-field="name"><span>John</span></td>
+            <td data-input="text" data-field="surname"><span>Doe</span></td>
+            <td data-input="date" data-field="birthDate"><span>2017-11-07</span></td>
+            <td data-input="select" data-field="teamColor"><span>Czerwony</span></td>
+            <td data-input="ignore" data-field="points"><span>255</span></td>
+        </tr>
+        <tr class="parent">
+            <td data-input="ignore">
+                <button class="edit" data-id="6" type="button">Edytuj</button>
+            </td>
+            <td data-input="text" data-field="name"><span>John</span></td>
+            <td data-input="text" data-field="surname"><span>Doe</span></td>
+            <td data-input="date" data-field="birthDate"><span>2017-11-07</span></td>
+            <td data-input="select" data-field="teamColor"><span>Czerwony</span></td>
+            <td data-input="ignore" data-field="points"><span>255</span></td>
+        </tr>
+        <tr class="parent">
+            <td data-input="ignore">
+                <button class="edit" data-id="7" type="button">Edytuj</button>
+            </td>
+            <td data-input="text" data-field="name"><span>John</span></td>
+            <td data-input="text" data-field="surname"><span>Doe</span></td>
+            <td data-input="date" data-field="birthDate"><span>2017-11-07</span></td>
+            <td data-input="select" data-field="teamColor"><span>Czerwony</span></td>
+            <td data-input="ignore" data-field="points"><span>255</span></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(function () {
+        selectOptions = {
+            red: "<span>Czerwony</span>",
+            blue: "Niebieski",
+            green: "Zielony",
+            yellow: "Żółty"
+        }
+
+        function createOptionsSelect() {
+            $select = $('<select/>')
+            for (option in selectOptions) {
+                $select.append('<option value=' + option + '>' + selectOptions[option] + '</option>')
+            }
+
+            return $select
+        }
+
+        function createJsonObject($elems) {
+            data = {}
+            for (i = 0; i < $elems.length; i++) {
+                fieldName = $($elems[i]).data('field')
+                if (undefined === fieldName)
+                    continue
+                $elem = $($elems[i]).children();
+                if ($($elem).is('select')) {
+                    data[fieldName] = $($elem).children('option:selected').val()
+                } else {
+
+                    data[fieldName] = '' !== $($elem).val()
+                        ? $($elem).val()
+                        : $($elem).text()
+                }
+            }
+
+            return data
+        }
+
+        function prepareInput($elem) {
+            inputType = $($elem).data('input')
+            innerText = $($elem).text()
+            switch (inputType) {
+                case 'text':
+                    return $('<input type="text" value="' + innerText + '">')
+                case 'date':
+                    return $('<input type="date" value="' + innerText + '">')
+                case 'select':
+                    return createOptionsSelect()
+                default:
+                    return $elem
+            }
+        }
+
+        function changeToInputs($elems) {
+            for (i = 0; i < $elems.length; i++) {
+                $input = prepareInput($elems[i])
+                $($elems[i]).html($($input))
+            }
+        }
+
+        function changeBackToText($elems) {
+            for (i = 0; i < $elems.length; i++) {
+                fieldName = $($elems[i]).data('field')
+                if (undefined === fieldName)
+                    continue
+                $elem = $($elems[i]).children();
+                if ($($elem).is('select')) {
+                    textToAppend = $($elem).children('option:selected').text()
+                } else {
+                    textToAppend = '' !== $($elem).val()
+                        ? $($elem).val()
+                        : $($elem).text()
+                }
+                $($elem).remove()
+                $($elems[i]).append($('<span>'+textToAppend+'</span>'))
+            }
+        }
+
+        $(document).on('click', '.edit', function () {
+            $editButton = $(this)
+            $rows = $editButton.parent().parent()
+            changeToInputs($rows.children('td:not([data-input=ignore])'))
+            $editButton.replaceWith($('<button class="save" data-id="' + $editButton.data("id") + '" type="button">Zapisz</button>'))
+        })
+
+        $(document).on('click', '.save', function () {
+            $saveButton = $(this)
+            $rows = $saveButton.parent().parent()
+            json = createJsonObject($rows.children('td'))
+            /** Nic nie stoi na przeszkodzie, zebys doklejal sobie kolejne pola do tego JSONa - np.
+             * `if(parent) {json['consultants'] = getSelectedConsultants()`, gdzie dorzucasz sobie arrayke ;) **/
+            json = JSON.stringify(json)
+            console.log(json)
+            // makeAjaxCall(json)
+            changeBackToText($rows.children('td'))
+            $saveButton.replaceWith($('<button class="edit" data-id="' + $editButton.data("id") + '" type="button">Edytuj</button>'))
+        })
+    })
+</script>
+</body>
+</html>
